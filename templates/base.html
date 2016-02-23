@@ -5,5 +5,12 @@
 <title>{% block title %}Media Server{% endblock title %}</title>
 {% block head %}{% endblock head %}
 </head>
-<body>{% block content %}{% endblock content %}</body>
+<body>
+	<nav>
+		<a href="/">Home</a>
+		<a href="/movies">Movies</a>
+		<a href="/tv_shows">TV Shows</a>
+	</nav>
+	<main>{% block content %}{% endblock content %}</main>
+</body>
 </html>
