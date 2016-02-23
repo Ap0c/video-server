@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from flask import Flask
+from flask import Flask, render_template
 
 
 # ----- Setup ----- #
@@ -15,7 +15,7 @@ def index():
 
 	"""Displays the homepage."""
 
-	return 'Hello world'
+	return render_template('index.html')
 
 
 # ----- Main ----- #
