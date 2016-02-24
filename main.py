@@ -1,11 +1,63 @@
 # ----- Imports ----- #
 
-from flask import Flask, render_template
+from flask import Flask, g, render_template
+import sqlite3
+
+
+# ----- Constants ----- #
+
+# The database schema file.
+DB_SCHEMA = 'schema.sql'
+
+# The database file.
+DB_FILE = 'media.db'
 
 
 # ----- Setup ----- #
 
+# The app object.
 app = Flask(__name__)
+
+
+# ----- Functions ----- #
+
+def get_db():
+
+	"""Retrieves a database connection."""
+
+	db = getattr(g, '_database', None)
+
+	if db is None:
+
+		db = g._database = sqlite3.connect(DB_FILE)
+		db.row_factory = sqlite3.Row
+
+	return db
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+
+	"""Closes the database connection when app context is destroyed."""
+
+	db = getattr(g, '_database', None)
+
+	if db is not None:
+		db.close()
+
+
+def init_db():
+
+	"""Creates the database from a schema file."""
+
+	with app.app_context():
+
+		db = get_db()
+
+		with app.open_resource(DB_SCHEMA, mode='r') as schema_file:
+			db.cursor().executescript(schema_file.read())
+
+		db.commit()
 
 
 # ----- Routes ----- #
@@ -37,4 +89,6 @@ def tv_shows():
 # ----- Main ----- #
 
 if __name__ == '__main__':
+
+	init_db()
 	app.run(debug=True)
