@@ -109,11 +109,25 @@ def movie(id):
 @app.route('/tv_shows')
 def tv_shows():
 
-	"""Displays a list of tv shows."""
+	"""Displays a list of TV shows."""
 
-	show_list = query_db('SELECT * FROM tv_shows')
+	result_list = query_db('SELECT * FROM tv_shows')
+	show_list = [dict(row) for row in result_list]
+
+	for item in show_list:
+		item['url'] = url_for('.tv_show', id=item['id'])
 
 	return render_template('tv_shows.html', shows=show_list)
+
+
+@app.route('/tv_shows/<id>')
+def tv_show(id):
+
+	"""Displays a TV show page."""
+
+	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (id), True)
+
+	return render_template('show.html', name=info['name'])
 
 
 # ----- Main ----- #

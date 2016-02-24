@@ -3,7 +3,7 @@
 {% block content %}
 	<ul>
 		{% for show in shows | sort(attribute='name') %}
-			<li>{{ show['name'] }}</li>
+			<li><a href="{{ show['url'] }}">{{ show['name'] }}</a></li>
 		{% endfor %}
 	</ul>
 {% endblock content %}
