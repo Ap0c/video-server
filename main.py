@@ -46,6 +46,18 @@ def close_connection(exception):
 		db.close()
 
 
+def query_db(query, args=(), single_result=False):
+
+	"""Queries the database."""
+
+	cur = get_db().execute(query, args)
+
+	results = cur.fetchall()
+	cur.close()
+
+	return (results[0] if results else None) if single_result else results
+
+
 def init_db():
 
 	"""Creates the database from a schema file."""
