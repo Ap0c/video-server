@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from flask import Flask, g, render_template
+from flask import Flask, g, render_template, url_for
 import sqlite3
 
 
@@ -87,7 +87,11 @@ def movies():
 
 	"""Displays a list of movies."""
 
-	movie_list = query_db('SELECT * FROM movies')
+	result_list = query_db('SELECT * FROM movies')
+	movie_list = [dict(row) for row in result_list]
+
+	for item in movie_list:
+		item['url'] = url_for('.movie', id=item['id'])
 
 	return render_template('movies.html', movies=movie_list)
 
