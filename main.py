@@ -87,7 +87,9 @@ def movies():
 
 	"""Displays a list of movies."""
 
-	return render_template('movies.html')
+	movie_list = query_db('SELECT * FROM movies')
+
+	return render_template('movies.html', movies=movie_list)
 
 
 @app.route('/tv_shows')
@@ -95,7 +97,9 @@ def tv_shows():
 
 	"""Displays a list of tv shows."""
 
-	return render_template('tv_shows.html')
+	show_list = query_db('SELECT * FROM tv_shows')
+
+	return render_template('tv_shows.html', shows=show_list)
 
 
 # ----- Main ----- #

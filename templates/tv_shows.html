@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Media Server - TV Shows{% endblock title %}
 {% block content %}
-	List of tv shows.
+	<ul>
+		{% for show in shows | sort(attribute='name') %}
+			<li>{{ show['name'] }}</li>
+		{% endfor %}
+	</ul>
 {% endblock content %}

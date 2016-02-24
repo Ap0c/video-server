@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Media Server - Movies{% endblock title %}
 {% block content %}
-	List of movies.
+	<ul>
+		{% for movie in movies | sort(attribute='name') %}
+			<li>{{ movie['name'] }}</li>
+		{% endfor %}
+	</ul>
 {% endblock content %}
