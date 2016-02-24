@@ -92,6 +92,16 @@ def movies():
 	return render_template('movies.html', movies=movie_list)
 
 
+@app.route('/movies/<id>')
+def movie(id):
+
+	"""Displays a movie page."""
+
+	info = query_db('SELECT * FROM movies WHERE id = ?', (id), True)
+
+	return render_template('movie.html', name=info['name'])
+
+
 @app.route('/tv_shows')
 def tv_shows():
 
