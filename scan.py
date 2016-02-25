@@ -1,24 +1,9 @@
 # ----- Imports ----- #
 
-import sqlite3
+from db import Database
 
 
 # ----- Functions ----- #
-
-def query_db(db_file, query, args=()):
-
-	"""Queries the database."""
-
-	db = sqlite3.connect(db_file)
-	db.row_factory = sqlite3.Row
-
-	cur = db.execute(query, args)
-	results = cur.fetchall()
-
-	db.close()
-
-	return results
-
 
 def sync_movies(location):
 
@@ -40,8 +25,8 @@ def sync(db_file):
 
 	if db_file:
 
-		media_locations = query_db(db_file,
-			'SELECT type, path FROM media_locations')
+		db = Database(db_file)
+		media_locations = db.query('SELECT type, path FROM media_locations')
 
 		for location in media_locations:
 
