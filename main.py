@@ -2,6 +2,9 @@
 
 from flask import Flask, g, render_template, url_for
 import sqlite3
+from threading import Thread
+
+from scan import sync
 
 
 # ----- Constants ----- #
@@ -128,6 +131,19 @@ def tv_show(id):
 	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (id), True)
 
 	return render_template('show.html', name=info['name'])
+
+
+@app.route('/scan')
+def scan():
+
+	"""Starts thread to scan media directories and populate database."""
+
+	scan_thread = getattr(g, '_scan_thread', None)
+
+	if not scan_thread or not scan_thread.isAlive():
+		g._scan_thread = Thread(target=sync)
+
+	return 'Accepted', 202
 
 
 # ----- Main ----- #

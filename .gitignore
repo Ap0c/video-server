@@ -1,2 +1,3 @@
 vidserver-env/*
 *.db
+__pycache__/*
