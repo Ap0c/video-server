@@ -141,7 +141,7 @@ def scan():
 	scan_thread = getattr(g, '_scan_thread', None)
 
 	if not scan_thread or not scan_thread.isAlive():
-		g._scan_thread = Thread(target=sync)
+		g._scan_thread = Thread(target=sync, args=(DB_FILE))
 
 	return 'Accepted', 202
 
