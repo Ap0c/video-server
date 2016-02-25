@@ -5,7 +5,7 @@ import sqlite3
 
 # ----- Database Class ----- #
 
-class db():
+class Database():
 
 	"""An object for managing database connections and queries."""
 
@@ -43,3 +43,10 @@ class db():
 		row_id = self.cur.lastrowid
 
 		return row_id or self.cur.fetchall()
+
+	def many(self, querystring, args=()):
+
+		"""Execute multiple queries on the database, will require args to be an
+		iterable of tuples. Will not return anything."""
+
+		self.cur.executemany(querystring, args)
