@@ -3,6 +3,32 @@
 import sqlite3
 
 
+# ----- Functions ----- #
+
+def _connection(func):
+
+	"""Decorator to open and close a database connection."""
+
+	def wrapper(*args, **kwargs):
+
+		self = args[0]
+
+		self.conn = sqlite3.connect(self.db_file)
+		self.conn.row_factory = sqlite3.Row
+		self.cur = self.conn.cursor()
+
+		result = func(*args, **kwargs)
+
+		self.conn.commit()
+		self.conn.close()
+		self.conn = None
+		self.cur = None
+
+		return result
+
+	return wrapper
+
+
 # ----- Database Class ----- #
 
 class Database():
@@ -12,27 +38,6 @@ class Database():
 	def __init__(self, db_file):
 
 		self.db_file = db_file
-
-	def _connection(self, func):
-
-		"""Decorator to open and close a database connection."""
-
-		def wrapper(*args, **kwargs):
-
-			self.conn = sqlite3.connect(self.db_file)
-			self.conn.row_factory = sqlite3.Row
-			self.cursor = self.conn.cursor()
-
-			result = func(*args, **kwargs)
-
-			self.conn.commit()
-			self.conn.close()
-			self.conn = None
-			self.cur = None
-
-			return result
-
-		return wrapper
 
 	@_connection
 	def query(self, querystring, args=()):
@@ -44,6 +49,7 @@ class Database():
 
 		return row_id or self.cur.fetchall()
 
+	@_connection
 	def many(self, querystring, args=()):
 
 		"""Execute multiple queries on the database, will require args to be an
