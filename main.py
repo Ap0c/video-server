@@ -94,17 +94,17 @@ def movies():
 	movie_list = [dict(row) for row in result_list]
 
 	for item in movie_list:
-		item['url'] = url_for('.movie', id=item['id'])
+		item['url'] = url_for('.movie', movie_id=item['id'])
 
 	return render_template('movies.html', movies=movie_list)
 
 
-@app.route('/movies/<id>')
-def movie(id):
+@app.route('/movies/<movie_id>')
+def movie(movie_id):
 
 	"""Displays a movie page."""
 
-	info = query_db('SELECT * FROM movies WHERE id = ?', (id), True)
+	info = query_db('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
 
 	return render_template('movie.html', name=info['name'])
 
@@ -133,7 +133,7 @@ def tv_show(id):
 	return render_template('show.html', name=info['name'])
 
 
-@app.route('/scan')
+@app.route('/scan', methods=['POST'])
 def scan():
 
 	"""Starts thread to scan media directories and populate database."""
@@ -141,7 +141,8 @@ def scan():
 	scan_thread = getattr(g, '_scan_thread', None)
 
 	if not scan_thread or not scan_thread.isAlive():
-		g._scan_thread = Thread(target=sync, args=(DB_FILE))
+		g._scan_thread = Thread(target=sync, args=(DB_FILE,))
+		g._scan_thread.start()
 
 	return 'Accepted', 202
 
