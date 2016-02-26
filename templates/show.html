@@ -6,7 +6,7 @@
 {% block content %}
 	Stuff about the TV show.
 	<h2>Episodes</h3>
-	{% for season in episodes | groupby('season') %}
+	{% for season in episodes | rejectattr('season', 'none') | groupby('season') %}
 		<h3>Season {{ season.grouper }}</h3>
 		<ul>
 			{% for episode in season.list %}
@@ -14,4 +14,10 @@
 			{% endfor %}
 		</ul>
 	{% endfor %}
+	<h3>Unknown Season</h3>
+	<ul>
+		{% for episode in episodes | selectattr('season', 'none') %}
+			<li>{{ episode['path'].split('/')[-1].split('.')[0] }}</li>
+		{% endfor %}
+	</ul>
 {% endblock content %}
