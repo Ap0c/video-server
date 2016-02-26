@@ -118,19 +118,20 @@ def tv_shows():
 	show_list = [dict(row) for row in result_list]
 
 	for item in show_list:
-		item['url'] = url_for('.tv_show', id=item['id'])
+		item['url'] = url_for('.tv_show', show_id=item['id'])
 
 	return render_template('tv_shows.html', shows=show_list)
 
 
-@app.route('/tv_shows/<id>')
-def tv_show(id):
+@app.route('/tv_shows/<show_id>')
+def tv_show(show_id):
 
 	"""Displays a TV show page."""
 
-	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (id), True)
+	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (show_id,), True)
+	episodes = query_db('SELECT * FROM episodes WHERE show = ?', (show_id,))
 
-	return render_template('show.html', name=info['name'])
+	return render_template('show.html', name=info['name'], episodes=episodes)
 
 
 @app.route('/scan', methods=['POST'])

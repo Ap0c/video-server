@@ -5,4 +5,13 @@
 	{% endblock header %}
 {% block content %}
 	Stuff about the TV show.
+	<h2>Episodes</h3>
+	{% for season in episodes | groupby('season') %}
+		<h3>Season {{ season.grouper }}</h3>
+		<ul>
+			{% for episode in season.list %}
+				<li>Episode {{ episode['number'] or 'unknown' }}</li>
+			{% endfor %}
+		</ul>
+	{% endfor %}
 {% endblock content %}
