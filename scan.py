@@ -116,7 +116,7 @@ def _get_show(db, name, dirname):
 	"""Retrieves or insert a show into the database, returns the id."""
 
 	result = db.query('SELECT id FROM tv_shows WHERE dirname = ?', (dirname,))
-	show_id = result[0] if result else result
+	show_id = result[0]['id'] if result else result
 
 	if not show_id:
 
