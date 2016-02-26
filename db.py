@@ -47,7 +47,11 @@ class Database():
 		self.cur.execute(querystring, args)
 		row_id = self.cur.lastrowid
 
-		return row_id or self.cur.fetchall()
+		if row_id:
+			return row_id
+		else:
+			result = self.cur.fetchall()
+			return result[0] if result else result
 
 	@_connection
 	def many(self, querystring, args=()):
