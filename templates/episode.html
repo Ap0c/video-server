@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Media Server - {{ show['name'] }} - S{{ episode['season'] }}E{{ episode['number'] }}{% endblock title %}
+{% block header %}
+		<header>
+			<h1><a href="{{ show['url'] }}">{{ show['name'] }}</a></h1>
+			<h3>Season {{ episode['season'] }} - Episode {{ episode['number'] }}</h3>
+		</header>
+	{% endblock header %}
+{% block content %}
+	{{ episode['path'] }}
+{% endblock content %}
