@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Media Server - Movies - {{ name }}{% endblock title %}
+{% block title %}Media Server - Movies - {{ movie['name'] }}{% endblock title %}
 {% block header %}
-		<header><h1>{{ name }}</h1></header>
+		<header><h1>{{ movie['name'] }}</h1></header>
 	{% endblock header %}
 {% block content %}
-	Stuff about the movie.
+	{# <video src="{{ movie['path'] }}"></video> #}
+	{{ movie['path'] }}
 {% endblock content %}

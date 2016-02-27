@@ -20,27 +20,29 @@ def _read_movies(movie_dir):
 
 	"""Builds a list of movies."""
 
+	movie_path = movie_dir['path']
 	movies = []
 
-	for movie in (f for f in os.listdir(movie_dir) if not f.startswith('.')):
+	for movie in (f for f in os.listdir(movie_path) if not f.startswith('.')):
 
 		display_name = os.path.splitext(movie)[0].replace('_', ' ').title()
-		movie_path = os.path.join(movie_dir, movie)
+		movie_path = os.path.join(str(movie_dir['id']), movie)
 		movies.append((display_name, movie_path))
 
 	return movies
 
 
-def _get_seasons(show):
+def _get_seasons(tv_dir, show):
 
 	"""Retrieves the show's episodes as a dictionary of seasons."""
 
+	show_path = os.path.join(tv_dir['path'], show)
 	seasons = {None: []}
 
-	for episode in (f for f in os.listdir(show) if not f.startswith('.')):
+	for episode in (f for f in os.listdir(show_path) if not f.startswith('.')):
 
 		info = re.findall(r'\d+', os.path.splitext(episode)[0])
-		episode_path = os.path.join(show, episode)
+		episode_path = os.path.join(str(tv_dir['id']), show, episode)
 
 		if not info or len(info) != 2:
 			seasons[None].append((None, episode_path))
@@ -59,14 +61,14 @@ def _read_shows(tv_dir):
 	"""Builds a list of TV shows."""
 
 	tv_shows = []
+	tv_path = tv_dir['path']
 
-	for name in (show for show in os.listdir(tv_dir) if _is_dir(tv_dir, show)):
+	for name in (show for show in os.listdir(tv_path) if _is_dir(tv_path, show)):
 
 		show_name = name.replace('_', ' ').title()
-		show_path = os.path.join(tv_dir, name)
 
 		show_entry = {'name': show_name, 'dirname': name}
-		show_entry['seasons'] = _get_seasons(show_path)
+		show_entry['seasons'] = _get_seasons(tv_dir, name)
 
 		tv_shows.append(show_entry)
 
@@ -197,14 +199,14 @@ def sync(db_file):
 	if db_file:
 
 		db = Database(db_file)
-		media_locations = db.query('SELECT type, path FROM media_locations')
+		media_locations = db.query('SELECT * FROM media_locations')
 
 		for location in media_locations:
 
 			if location['type'] == 'movies':
-				_sync_movies(db, location['path'])
+				_sync_movies(db, location)
 			elif location['type'] == 'tv_shows':
-				_sync_shows(db, location['path'])
+				_sync_shows(db, location)
 
 	else:
 		raise Exception('No db file given.')

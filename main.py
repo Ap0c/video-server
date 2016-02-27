@@ -106,7 +106,7 @@ def movie(movie_id):
 
 	info = query_db('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
 
-	return render_template('movie.html', name=info['name'])
+	return render_template('movie.html', movie=info)
 
 
 @app.route('/tv_shows')
