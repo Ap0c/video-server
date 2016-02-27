@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Media Server - Settings{% endblock title %}
+{% block header %}
+		<header><h1>Settings</h1></header>
+	{% endblock header %}
+{% block content %}
+	<h2>Manage Library</h2>
+	<button>Scan</button><button>Add Media Location</button>
+	<h2>Media Locations</h2>
+	{% for location_type in locations | groupby('type') %}
+		<h3>{{ location_type.grouper.title() }}</h3>
+		{% for location in location_type.list %}
+			<p>{{ location['path'] }}</p>
+		{% endfor %}
+	{% endfor %}
+{% endblock content %}

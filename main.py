@@ -153,6 +153,16 @@ def episode(episode_id):
 	return render_template('episode.html', episode=info, show=show)
 
 
+@app.route('/settings')
+def settings():
+
+	"""Displays the settings page."""
+
+	locations = query_db('SELECT * FROM media_locations')
+
+	return render_template('settings.html', locations=locations)
+
+
 @app.route('/scan', methods=['POST'])
 def scan():
 
