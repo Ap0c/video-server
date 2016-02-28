@@ -11,19 +11,22 @@
 {% endblock header %}
 {% block content %}
 	<h2>Manage Library</h2>
-	<button id="scan-button">Scan</button><button id="add-media-button">Add Media Location</button>
-	<dialog id="add-media-dialog">
+	<div class="settings-buttons"><button id="scan-button" class="settings-button">Scan</button><button id="add-media-button" class="settings-button">Add Media Location</button></div>
+	<dialog id="add-media-dialog" class="dialog">
 		<h3>Add Media Source</h3>
 		<form method="dialog" id="source-form">
-			<label for="source-input">Source File Path (Absolute)</label>
-			<input name="source-path" id="source-path" type="text" />
-			<select id="source-type" name="source-type">
-				<option value="movies">Movies</option>
-				<option value="tv_shows">TV Shows</option>
-			</select>
-			<menu>
-				<button type="reset" id="close-dialog-button">Close</button>
-				<input type="submit" value="Add" />
+			<div class="form-fields">
+				<label for="source-input">Source File Path (Absolute)</label>
+				<input name="source-path" id="source-path" type="text" />
+				<label for="source-type">Media Type</label>
+				<select id="source-type" name="source-type">
+					<option value="movies">Movies</option>
+					<option value="tv_shows">TV Shows</option>
+				</select>
+			</div>
+			<menu class="settings-buttons">
+				<button type="reset" id="close-dialog-button" class="settings-button">Close</button>
+				<input type="submit" class="settings-button" value="Add" />
 			</menu>
 		</form>
 	</dialog>
@@ -32,7 +35,7 @@
 	{% for location_type in locations | groupby('type') %}
 		<h3>{{ location_type.grouper.title() }}</h3>
 		{% for location in location_type.list %}
-			<p>{{ location['path'] }}</p>
+			<p class="media-path">{{ location['path'] }}</p>
 		{% endfor %}
 	{% endfor %}
 {% endblock content %}
