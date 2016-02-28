@@ -4,7 +4,11 @@ html, body {
 	margin: 0;
 	padding: 0;
 	font-family: -apple-system, sans-serif;
-	color: #5073BC;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
 }
 
 
@@ -14,8 +18,8 @@ nav {
 	display: flex;
 	flex-wrap: wrap;
 	width: 100%;
-	background-color: #3fb0ac;
-	color: #fff;
+	background-color: #64706c;
+	color: #ede9ce;
 	font-family: HelveticaNeue-Light, sans-serif;
 	font-size: x-large;
 }
@@ -23,14 +27,55 @@ nav {
 nav a {
 	flex-grow: 1;
 	text-align: center;
-	text-decoration: none;
-	padding: .3em 0;
-}
-
-nav a:visited {
-	color: #fff;
+	padding: .3em;
 }
 
 nav a:hover {
-	background-color: #5073BC;
+	background-color: #9fa8a3;
+}
+
+
+/* ----- Headings ----- */
+
+h1, h2, h3 {
+	padding: .3em 1em;
+	background-color: #ede9ce;
+	color: #935347;
+}
+
+.season {
+	background-color: #ECD9BD;
+}
+
+
+/* ----- Lists ----- */
+
+ul {
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	font-size: large;
+	margin: 0;
+	padding: 1em;
+}
+
+li {
+	padding: 1em;
+	margin: .2em;
+	text-align: center;
+	background-color: #ede9ce;
+	color: #935347;
+}
+
+ul a {
+	flex-grow: 1;
+}
+
+li:hover {
+	background-color: #935347;
+	color: #ede9ce;
+}
+
+.movie-item, .show-item {
+	margin: .3em;
 }

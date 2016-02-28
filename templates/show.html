@@ -4,17 +4,15 @@
 	<header><h1>{{ name }}</h1></header>
 {% endblock header %}
 {% block content %}
-	Stuff about the TV show.
-	<h2>Episodes</h3>
 	{% for season in episodes | rejectattr('season', 'none') | groupby('season') %}
-		<h3>Season {{ season.grouper }}</h3>
+		<h3 class="season">Season {{ season.grouper }}</h3>
 		<ul>
 			{% for episode in season.list %}
-				<li><a href="{{ url_for('.episode', episode_id=episode['id']) }}">Episode {{ episode['number'] or 'unknown' }}</a></li>
+				<a href="{{ url_for('.episode', episode_id=episode['id']) }}"><li>Episode {{ episode['number'] or 'unknown' }}</li></a>
 			{% endfor %}
 		</ul>
 	{% endfor %}
-	<h3>Unknown Season</h3>
+	<h3 class="season">Unknown Season</h3>
 	<ul>
 		{% for episode in episodes | selectattr('season', 'none') %}
 			<li>{{ episode['path'].split('/')[-1].split('.')[0] }}</li>

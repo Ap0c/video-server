@@ -2,7 +2,7 @@
 {% block title %}Media Server - {{ show['name'] }} - S{{ episode['season'] }}E{{ episode['number'] }}{% endblock title %}
 {% block header %}
 	<header>
-		<h1><a href="{{ url_for('.tv_show', show_id=show['id']) }}">{{ show['name'] }}</a></h1>
+		<a href="{{ url_for('.tv_show', show_id=show['id']) }}"><h1>{{ show['name'] }}</h1></a>
 		<h3>Season {{ episode['season'] }} - Episode {{ episode['number'] }}</h3>
 	</header>
 {% endblock header %}
