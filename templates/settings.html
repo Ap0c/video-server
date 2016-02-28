@@ -12,6 +12,21 @@
 {% block content %}
 	<h2>Manage Library</h2>
 	<button id="scan-button">Scan</button><button id="add-media-button">Add Media Location</button>
+	<dialog id="add-media-dialog">
+		<h3>Add Media Source</h3>
+		<form method="dialog" id="source-form">
+			<label for="source-input">Source File Path (Absolute)</label>
+			<input name="source-path" id="source-path" type="text" />
+			<select id="source-type" name="source-type">
+				<option value="movies">Movies</option>
+				<option value="tv_shows">TV Shows</option>
+			</select>
+			<menu>
+				<button type="reset" id="close-dialog-button">Close</button>
+				<input type="submit" value="Add" />
+			</menu>
+		</form>
+	</dialog>
 	<p id="error-message"></p>
 	<h2>Media Locations</h2>
 	{% for location_type in locations | groupby('type') %}

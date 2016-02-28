@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from flask import Flask, g, render_template, url_for
+from flask import Flask, g, render_template, request
 import sqlite3
 from threading import Thread
 
@@ -59,6 +59,16 @@ def query_db(query, args=(), single_result=False):
 	cur.close()
 
 	return (results[0] if results else None) if single_result else results
+
+
+def execute_query(query, args=()):
+
+	"""Executes a query on the database."""
+
+	conn = get_db()
+	conn.execute(query, args)
+
+	conn.commit()
 
 
 def init_db():
@@ -160,6 +170,20 @@ def scan():
 		g._scan_thread.start()
 
 	return 'Accepted', 202
+
+
+@app.route('/add_source', methods=['PUT'])
+def add_source():
+
+	"""Adds a new media source to the database."""
+
+	media_type = request.form['source-type']
+	media_path = request.form['source-path']
+
+	execute_query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
+		(media_type, media_path))
+
+	return 'Created', 201
 
 
 # ----- Main ----- #
