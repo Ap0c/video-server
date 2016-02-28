@@ -4,13 +4,15 @@
 	<link rel="stylesheet" href="/static/dialog-polyfill.css">
 	<script type="text/javascript" src="/static/dialog-polyfill.js"></script>
 	<script type="text/javascript" src="/static/fetch.js"></script>
+	<script type="text/javascript" src="/static/settings.js"></script>
 {% endblock head %}
 {% block header %}
 	<header><h1>Settings</h1></header>
 {% endblock header %}
 {% block content %}
 	<h2>Manage Library</h2>
-	<button>Scan</button><button>Add Media Location</button>
+	<button id="scan-button">Scan</button><button id="add-media-button">Add Media Location</button>
+	<p id="error-message"></p>
 	<h2>Media Locations</h2>
 	{% for location_type in locations | groupby('type') %}
 		<h3>{{ location_type.grouper.title() }}</h3>

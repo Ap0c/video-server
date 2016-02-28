@@ -3,7 +3,7 @@
 {% block content %}
 	<ul>
 		{% for movie in movies | sort(attribute='name') %}
-			<li><a href="{{ movie['url'] }}">{{ movie['name'] }}</a></li>
+			<li><a href="{{ url_for('.movie', movie_id=movie['id']) }}">{{ movie['name'] }}</a></li>
 		{% endfor %}
 	</ul>
 {% endblock content %}

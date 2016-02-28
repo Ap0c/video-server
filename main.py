@@ -90,11 +90,7 @@ def movies():
 
 	"""Displays a list of movies."""
 
-	result_list = query_db('SELECT * FROM movies')
-	movie_list = [dict(row) for row in result_list]
-
-	for item in movie_list:
-		item['url'] = url_for('.movie', movie_id=item['id'])
+	movie_list = query_db('SELECT * FROM movies')
 
 	return render_template('movies.html', movies=movie_list)
 
@@ -114,11 +110,7 @@ def tv_shows():
 
 	"""Displays a list of TV shows."""
 
-	result_list = query_db('SELECT * FROM tv_shows')
-	show_list = [dict(row) for row in result_list]
-
-	for item in show_list:
-		item['url'] = url_for('.tv_show', show_id=item['id'])
+	show_list = query_db('SELECT * FROM tv_shows')
 
 	return render_template('tv_shows.html', shows=show_list)
 
@@ -129,11 +121,7 @@ def tv_show(show_id):
 	"""Displays a TV show page."""
 
 	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (show_id,), True)
-	episode_list = query_db('SELECT * FROM episodes WHERE show = ?', (show_id,))
-	episodes = [dict(row) for row in episode_list]
-
-	for item in episodes:
-		item['url'] = url_for('.episode', episode_id=item['id'])
+	episodes = query_db('SELECT * FROM episodes WHERE show = ?', (show_id,))
 
 	return render_template('show.html', name=info['name'], episodes=episodes)
 
@@ -146,9 +134,6 @@ def episode(episode_id):
 	info = query_db('SELECT * FROM episodes WHERE id = ?', (episode_id,), True)
 	show = query_db('SELECT * FROM tv_shows WHERE id = ?',
 		(info['show'],), True)
-
-	show = dict(show)
-	show['url'] = url_for('.tv_show', show_id=show['id'])
 
 	return render_template('episode.html', episode=info, show=show)
 
