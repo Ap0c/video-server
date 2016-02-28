@@ -3,6 +3,8 @@
 from flask import Flask, g, render_template, request
 import sqlite3
 from threading import Thread
+import os.path
+import subprocess
 
 from scan import sync
 
@@ -14,6 +16,9 @@ DB_SCHEMA = 'schema.sql'
 
 # The database file.
 DB_FILE = 'media.db'
+
+# Location of the app media directory.
+MEDIA_DIR = 'media'
 
 
 # ----- Setup ----- #
@@ -61,14 +66,18 @@ def query_db(query, args=(), single_result=False):
 	return (results[0] if results else None) if single_result else results
 
 
-def execute_query(query, args=()):
+def exec_query(query, args=()):
 
 	"""Executes a query on the database."""
 
 	conn = get_db()
-	conn.execute(query, args)
+
+	cur = conn.execute(query, args)
+	row_id = cur.lastrowid
 
 	conn.commit()
+
+	return row_id
 
 
 def init_db():
@@ -180,10 +189,19 @@ def add_source():
 	media_type = request.form['source-type']
 	media_path = request.form['source-path']
 
-	execute_query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
-		(media_type, media_path))
+	if (os.path.isdir(media_path)):
 
-	return 'Created', 201
+		row_id = exec_query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
+			(media_type, media_path))
+
+		symlink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+			MEDIA_DIR, str(row_id))
+		subprocess.call(['ln', '-s', media_path, symlink_path])
+
+		return 'Created', 201
+
+	else:
+		return 'No such path on the file system.', 400
 
 
 # ----- Main ----- #

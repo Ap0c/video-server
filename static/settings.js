@@ -20,12 +20,19 @@ function addSource (form) {
 	form.preventDefault();
 
 	var data = new FormData(form.target);
-	console.log(data);
+
 	fetch('/add_source', { method: 'put', body: data })
 		.then(function (response) {
+
 			if (response.status === 201) {
 				location.reload();
+			} else {
+				response.text().then(function (body) {
+					var errorMessage = document.getElementById('error-message');
+					errorMessage.textContent = body;
+				});
 			}
+
 		});
 
 }
