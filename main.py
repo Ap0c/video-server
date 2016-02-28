@@ -20,6 +20,9 @@ DB_FILE = 'media.db'
 # Location of the app media directory.
 MEDIA_DIR = 'media'
 
+# Media url.
+MEDIA_URL = 'media'
+
 
 # ----- Setup ----- #
 
@@ -120,8 +123,9 @@ def movie(movie_id):
 	"""Displays a movie page."""
 
 	info = query_db('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
+	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
 
-	return render_template('movie.html', movie=info)
+	return render_template('movie.html', movie=info, video_url=video_url)
 
 
 @app.route('/tv_shows')
@@ -154,7 +158,10 @@ def episode(episode_id):
 	show = query_db('SELECT * FROM tv_shows WHERE id = ?',
 		(info['show'],), True)
 
-	return render_template('episode.html', episode=info, show=show)
+	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
+
+	return render_template('episode.html', episode=info, show=show,
+		video_url=video_url)
 
 
 @app.route('/settings')

@@ -4,6 +4,5 @@
 	<header><h1>{{ movie['name'] }}</h1></header>
 {% endblock header %}
 {% block content %}
-	{# <video src="{{ movie['path'] }}"></video> #}
-	{{ movie['path'] }}
+	<video src="{{ video_url }}" controls></video>
 {% endblock content %}
