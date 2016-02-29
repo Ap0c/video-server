@@ -7,7 +7,7 @@
 	{% for season in episodes | rejectattr('season', 'none') | groupby('season') %}
 		<h3 class="season">Season {{ season.grouper }}</h3>
 		<ul>
-			{% for episode in season.list %}
+			{% for episode in season.list | sort(attribute='number') %}
 				<a href="{{ url_for('.episode', episode_id=episode['id']) }}"><li>Episode {{ episode['number'] or 'unknown' }}</li></a>
 			{% endfor %}
 		</ul>

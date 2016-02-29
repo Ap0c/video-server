@@ -1,0 +1,17 @@
+# Remember to set disable_symlinks off in http module of nginx.conf.
+
+server {
+
+        listen 8080;
+
+        server_name 127.0.0.1;
+
+        location /media/ {
+                alias /home/pi/video-server/media/;
+        }
+
+        location / {
+                proxy_pass http://localhost:5000;
+        }
+
+}
