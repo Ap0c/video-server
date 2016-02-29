@@ -1,0 +1,4 @@
+recursive-include video_server/templates *
+recursive-include video_server/static *
+video_server/schema.sql
+video_server/media
