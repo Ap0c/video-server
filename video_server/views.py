@@ -6,7 +6,7 @@ from threading import Thread
 import os.path
 import subprocess
 
-from scan import sync
+from .scan import sync
 
 
 # ----- Constants ----- #

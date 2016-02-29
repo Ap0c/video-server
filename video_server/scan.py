@@ -3,7 +3,7 @@
 import os
 import re
 
-from db import Database
+from .db import Database
 
 
 # ----- Functions ----- #
