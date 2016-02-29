@@ -1,0 +1,13 @@
+[Unit]
+Description=Video Server
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/video-server
+Environment="PATH=/home/pi/video-server/video-server-env/bin"
+ExecStart=/home/pi/light-control/video-server-env/bin/python main.py
+
+[Install]
+WantedBy=multi-user.target
