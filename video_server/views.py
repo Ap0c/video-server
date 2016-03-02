@@ -59,7 +59,7 @@ def movie(movie_id):
 
 	"""Displays a movie page."""
 
-	info = db.query('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
+	info = db.query('SELECT * FROM movies WHERE id = ?', (movie_id,))[0]
 	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
 
 	return render_template('movie.html', movie=info, video_url=video_url)
@@ -80,7 +80,7 @@ def tv_show(show_id):
 
 	"""Displays a TV show page."""
 
-	info = db.query('SELECT * FROM tv_shows WHERE id = ?', (show_id,), True)
+	info = db.query('SELECT * FROM tv_shows WHERE id = ?', (show_id,))[0]
 	episodes = db.query('SELECT * FROM episodes WHERE show = ?', (show_id,))
 
 	return render_template('show.html', name=info['name'], episodes=episodes)
@@ -91,9 +91,8 @@ def episode(episode_id):
 
 	"""Displays an episode page."""
 
-	info = db.query('SELECT * FROM episodes WHERE id = ?', (episode_id,), True)
-	show = db.query('SELECT * FROM tv_shows WHERE id = ?',
-		(info['show'],), True)
+	info = db.query('SELECT * FROM episodes WHERE id = ?', (episode_id,))[0]
+	show = db.query('SELECT * FROM tv_shows WHERE id = ?', (info['show'],))[0]
 
 	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
 
