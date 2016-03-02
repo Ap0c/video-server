@@ -35,9 +35,20 @@ class Database():
 
 	"""An object for managing database connections and queries."""
 
-	def __init__(self, db_file):
+	def __init__(self, db_file, schema_file=None):
 
 		self.db_file = db_file
+
+		if schema_file:
+			self.init_db(schema_file)
+
+	@_connection
+	def init_db(self, schema_path):
+
+		"""Sets up the database from a schema file."""
+
+		with open(schema_path, 'r') as schema_file:
+			self.cur.executescript(schema_file.read())
 
 	@_connection
 	def query(self, querystring, args=()):

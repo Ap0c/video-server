@@ -1,18 +1,19 @@
 # ----- Imports ----- #
 
 from flask import Flask, g, render_template, request
-import sqlite3
 from threading import Thread
 import os.path
 import subprocess
 
 from .scan import sync
+from .db import Database
 
 
 # ----- Constants ----- #
 
 # The database schema file.
-DB_SCHEMA = 'schema.sql'
+DB_SCHEMA = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+	'schema.sql')
 
 # The database file.
 DB_FILE = 'media.db'
@@ -29,72 +30,8 @@ MEDIA_URL = 'media'
 # The app object.
 app = Flask(__name__)
 
-
-# ----- Functions ----- #
-
-def get_db():
-
-	"""Retrieves a database connection."""
-
-	db = getattr(g, '_database', None)
-
-	if db is None:
-
-		db = g._database = sqlite3.connect(DB_FILE)
-		db.row_factory = sqlite3.Row
-
-	return db
-
-
-@app.teardown_appcontext
-def close_connection(exception):
-
-	"""Closes the database connection when app context is destroyed."""
-
-	db = getattr(g, '_database', None)
-
-	if db is not None:
-		db.close()
-
-
-def query_db(query, args=(), single_result=False):
-
-	"""Queries the database."""
-
-	cur = get_db().execute(query, args)
-
-	results = cur.fetchall()
-	cur.close()
-
-	return (results[0] if results else None) if single_result else results
-
-
-def exec_query(query, args=()):
-
-	"""Executes a query on the database."""
-
-	conn = get_db()
-
-	cur = conn.execute(query, args)
-	row_id = cur.lastrowid
-
-	conn.commit()
-
-	return row_id
-
-
-def init_db():
-
-	"""Creates the database from a schema file."""
-
-	with app.app_context():
-
-		db = get_db()
-
-		with app.open_resource(DB_SCHEMA, mode='r') as schema_file:
-			db.cursor().executescript(schema_file.read())
-
-		db.commit()
+# Handles database connections and queries.
+db = Database(DB_FILE, DB_SCHEMA)
 
 
 # ----- Routes ----- #
@@ -112,7 +49,7 @@ def movies():
 
 	"""Displays a list of movies."""
 
-	movie_list = query_db('SELECT * FROM movies')
+	movie_list = db.query('SELECT * FROM movies')
 
 	return render_template('movies.html', movies=movie_list)
 
@@ -122,7 +59,7 @@ def movie(movie_id):
 
 	"""Displays a movie page."""
 
-	info = query_db('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
+	info = db.query('SELECT * FROM movies WHERE id = ?', (movie_id,), True)
 	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
 
 	return render_template('movie.html', movie=info, video_url=video_url)
@@ -133,7 +70,7 @@ def tv_shows():
 
 	"""Displays a list of TV shows."""
 
-	show_list = query_db('SELECT * FROM tv_shows')
+	show_list = db.query('SELECT * FROM tv_shows')
 
 	return render_template('tv_shows.html', shows=show_list)
 
@@ -143,8 +80,8 @@ def tv_show(show_id):
 
 	"""Displays a TV show page."""
 
-	info = query_db('SELECT * FROM tv_shows WHERE id = ?', (show_id,), True)
-	episodes = query_db('SELECT * FROM episodes WHERE show = ?', (show_id,))
+	info = db.query('SELECT * FROM tv_shows WHERE id = ?', (show_id,), True)
+	episodes = db.query('SELECT * FROM episodes WHERE show = ?', (show_id,))
 
 	return render_template('show.html', name=info['name'], episodes=episodes)
 
@@ -154,8 +91,8 @@ def episode(episode_id):
 
 	"""Displays an episode page."""
 
-	info = query_db('SELECT * FROM episodes WHERE id = ?', (episode_id,), True)
-	show = query_db('SELECT * FROM tv_shows WHERE id = ?',
+	info = db.query('SELECT * FROM episodes WHERE id = ?', (episode_id,), True)
+	show = db.query('SELECT * FROM tv_shows WHERE id = ?',
 		(info['show'],), True)
 
 	video_url = '/{}/{}'.format(MEDIA_URL, info['path'])
@@ -169,7 +106,7 @@ def settings():
 
 	"""Displays the settings page."""
 
-	locations = query_db('SELECT * FROM media_locations')
+	locations = db.query('SELECT * FROM media_locations')
 
 	return render_template('settings.html', locations=locations)
 
@@ -198,7 +135,7 @@ def add_source():
 
 	if (os.path.isdir(media_path)):
 
-		row_id = exec_query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
+		row_id = db.query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
 			(media_type, media_path))
 
 		symlink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),

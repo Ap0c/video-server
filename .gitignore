@@ -1,4 +1,5 @@
 vidserver-env/*
 *.db
-__pycache__/*
+*__pycache__/*
 .DS_Store
+video_server/media/*
