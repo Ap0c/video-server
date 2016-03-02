@@ -82,12 +82,20 @@ li:hover {
 }
 
 
+/* ----- Videos ----- */
+
+video {
+	width: 80vw;
+	margin: 0 10vw;
+}
+
+
 /* ----- Settings ----- */
 
 .settings-buttons {
 	display: flex;
 	justify-content: center;
-	padding: 0 2em;
+	padding: 1em 2em;
 }
 
 .settings-button {
@@ -118,7 +126,7 @@ li:hover {
 	width: 80vw;
 }
 
-.dialog h3 {
+.dialog-heading {
 	text-align: center;
 }
 
@@ -146,6 +154,10 @@ li:hover {
 
 input[type="submit"] {
 	-webkit-appearance: none;
+}
+
+#error-message {
+	margin: 1% 4%;
 }
 
 @media (min-width: 500px) {

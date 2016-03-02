@@ -1,13 +1,30 @@
 // ----- Functions ----- //
 
+// Displays an error message.
+function showError (message) {
+
+	var errorMessage = document.getElementById('error-message');
+	errorMessage.textContent = message;
+
+}
+
+// Removes the error message.
+function clearError () {
+
+	var errorMessage = document.getElementById('error-message');
+	errorMessage.textContent = '';
+
+}
+
 // Sends a request to scan the media directories.
 function scanMedia () {
 
 	fetch('/scan', {method: 'post'}).then(function (response) {
 
 		if (response.status !== 202) {
-			var errorMessage = document.getElementById('error-message');
-			errorMessage.textContent = 'Scan failed.';
+			showError('Scan failed.');
+		} else {
+			clearError();
 		}
 
 	});
@@ -28,8 +45,7 @@ function addSource (form) {
 				location.reload();
 			} else {
 				response.text().then(function (body) {
-					var errorMessage = document.getElementById('error-message');
-					errorMessage.textContent = body;
+					showError(body);
 				});
 			}
 

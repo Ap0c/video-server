@@ -1,19 +1,37 @@
 {% extends "base.html" %}
 {% block title %}Media Server - Settings{% endblock title %}
+
 {% block head %}
 	<link rel="stylesheet" href="/static/dialog-polyfill.css">
 	<script type="text/javascript" src="/static/dialog-polyfill.js"></script>
 	<script type="text/javascript" src="/static/fetch.js"></script>
 	<script type="text/javascript" src="/static/settings.js"></script>
 {% endblock head %}
+
 {% block header %}
 	<header><h1>Settings</h1></header>
 {% endblock header %}
+
 {% block content %}
-	<h2>Manage Library</h2>
-	<div class="settings-buttons"><button id="scan-button" class="settings-button">Scan</button><button id="add-media-button" class="settings-button">Add Media Location</button></div>
+
+	<section>
+		<h2>Manage Library</h2>
+		<div class="settings-buttons"><button id="scan-button" class="settings-button">Scan</button><button id="add-media-button" class="settings-button">Add Media Location</button></div>
+		<p id="error-message"></p>
+	</section>
+
+	<section>
+		<h2>Media Locations</h2>
+		{% for location_type in locations | groupby('type') %}
+			<h3>{{ location_type.grouper.replace('_', ' ').title() }}</h3>
+			{% for location in location_type.list %}
+				<p class="media-path">{{ location['path'] }}</p>
+			{% endfor %}
+		{% endfor %}
+	</section>
+
 	<dialog id="add-media-dialog" class="dialog">
-		<h3>Add Media Source</h3>
+		<h3 class="dialog-heading">Add Media Source</h3>
 		<form method="dialog" id="source-form">
 			<div class="form-fields">
 				<label for="source-input">Source File Path (Absolute)</label>
@@ -30,12 +48,5 @@
 			</menu>
 		</form>
 	</dialog>
-	<p id="error-message"></p>
-	<h2>Media Locations</h2>
-	{% for location_type in locations | groupby('type') %}
-		<h3>{{ location_type.grouper.title() }}</h3>
-		{% for location in location_type.list %}
-			<p class="media-path">{{ location['path'] }}</p>
-		{% endfor %}
-	{% endfor %}
+
 {% endblock content %}

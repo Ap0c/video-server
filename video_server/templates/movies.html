@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Media Server - Movies{% endblock title %}
+
+{% block header %}
+	<header><h1>Movies</h1></header>
+{% endblock header %}
+
 {% block content %}
 	<ul>
 		{% for movie in movies | sort(attribute='name') %}
