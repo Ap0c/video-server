@@ -113,38 +113,70 @@ def edit_metadata(media_type, media_id):
 		if media_type == 'movie':
 			query = 'SELECT name, path FROM movies WHERE id=?'
 		elif media_type == 'show':
-			query = 'SELECT name FROM tv_shows WHERE id=?'
+			query = 'SELECT name, dirname FROM tv_shows WHERE id=?'
 		elif media_type == 'episode':
 			query = 'SELECT name, number, season, path FROM episodes WHERE id=?'
 
-		metadata = dict(db.query(query, (media_id,))[0])
+		result = db.query(query, (media_id,))
 
-		if not metadata:
+		if not result:
 			return 'Media ID not recognised.', 404
+
+		metadata = []
+		print(result[0])
+		for key, value in dict(result[0]).items():
+			if key == 'name':
+				datum = {
+					'field': key,
+					'value': value,
+					'editable': True,
+					'type': 'text'
+				}
+			elif key in ['number', 'season']:
+				datum = {
+					'field': key,
+					'value': value,
+					'editable': True,
+					'type': 'number'
+				}
+			elif key == 'path':
+				datum = {
+					'field': key,
+					'value': value.split('/', 1)[1],
+					'editable': False
+				}
+			elif key == 'dirname':
+				datum = {'field': key, 'value': value, 'editable': False}
+			metadata.append(datum)
 
 		return render_template('edit_metadata.html', metadata=metadata,
 			media_type=media_type)
 
 	else:
 
+		form = request.form
+
 		if media_type == 'movie':
-			query = 'UPDATE movies SET name=?, path=? WHERE id=?'
-			args = (request.form['name'], request.form['path'], media_id)
+
+			query = 'UPDATE movies SET name=? WHERE id=?'
+			args = (form['name'], media_id)
 			route = 'movie'
+
 		elif media_type == 'show':
+
 			query = 'UPDATE tv_shows SET name=? WHERE id=?'
-			args = (request.form['name'], media_id)
+			args = (form['name'], media_id)
 			route = 'tv_show'
+
 		elif media_type == 'episode':
-			query = """UPDATE movies SET name=?, number=?, season=?, path=?
-				WHERE id=?"""
-			args = (request.form['name'], request.form['number'],
-				request.form['season'], request.form['path'], media_id)
+
+			query = 'UPDATE movies SET name=?, number=?, season=? WHERE id=?'
+			args = (form['name'], form['number'], form['season'], media_id)
 			route = 'episode'
 
 		db.query(query, args)
 
-		return redirect(url_for(route, id=media_id))
+		return redirect(url_for(route, movie_id=media_id))
 
 
 @app.route('/settings')

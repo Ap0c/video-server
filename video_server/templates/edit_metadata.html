@@ -1,12 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Edit Metadata - {{ metadata['name'] }}{% endblock %}
+{% block title %}Edit Metadata{% endblock %}
 
 {% block header %}
-	<header><h1>Edit Metadata - {{ metadata['name'] }}</h1></header>
+	<header><h1>Edit Metadata</h1></header>
 {% endblock header %}
 
 {% block content %}
-	{% for key, value in metadata.items() if key != 'id' %}
-		<p>{{ key.title() }} - {{ value }}</p>
-	{% endfor %}
+	<form action="" method="post">
+		{% for datum in metadata %}
+			{% if not datum['editable'] %}
+				<h4>{{ 'Directory' if datum['field'] == 'dirname' else datum['field'].title() }}</h4>
+				<p>{{ datum['value'] }}</p>
+			{% else %}
+				<label for=""><h4>{{ datum['field'].title() }}</h4></label>
+				<input type="{{ datum['type'] }}" name="{{ datum['field'] }}" value="{{ datum['value'] or '' }}">
+			{% endif %}
+		{% endfor %}
+		<input type="submit" value="Save">
+	</form>
 {% endblock content %}
