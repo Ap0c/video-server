@@ -83,7 +83,7 @@ def tv_show(show_id):
 	info = db.query('SELECT * FROM tv_shows WHERE id = ?', (show_id,))[0]
 	episodes = db.query('SELECT * FROM episodes WHERE show = ?', (show_id,))
 
-	return render_template('show.html', name=info['name'], episodes=episodes)
+	return render_template('show.html', show=info, episodes=episodes)
 
 
 @app.route('/tv_shows/episode/<episode_id>')

@@ -13,4 +13,5 @@
 
 {% block content %}
 	<video src="{{ video_url }}" controls></video>
+	<p><a href="{{ url_for('.edit_metadata', media_type='episode', media_id=episode['id']) }}">Edit Metadata</a></p>
 {% endblock content %}
