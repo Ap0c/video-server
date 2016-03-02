@@ -161,22 +161,25 @@ def edit_metadata(media_type, media_id):
 			query = 'UPDATE movies SET name=? WHERE id=?'
 			args = (form['name'], media_id)
 			route = 'movie'
+			route_args = {'movie_id': media_id}
 
 		elif media_type == 'show':
 
 			query = 'UPDATE tv_shows SET name=? WHERE id=?'
 			args = (form['name'], media_id)
 			route = 'tv_show'
+			route_args = {'show_id': media_id}
 
 		elif media_type == 'episode':
 
-			query = 'UPDATE movies SET name=?, number=?, season=? WHERE id=?'
+			query = 'UPDATE episodes SET name=?, number=?, season=? WHERE id=?'
 			args = (form['name'], form['number'], form['season'], media_id)
 			route = 'episode'
+			route_args = {'episode_id': media_id}
 
 		db.query(query, args)
 
-		return redirect(url_for(route, movie_id=media_id))
+		return redirect(url_for(route, **route_args))
 
 
 @app.route('/settings')
