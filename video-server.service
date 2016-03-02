@@ -7,7 +7,7 @@ User=pi
 Group=pi
 WorkingDirectory=/home/pi/video-server
 Environment="PATH=/home/pi/video-server/video-server-env/bin"
-ExecStart=/home/pi/video-server/video-server-env/bin/python main.py
+ExecStart=/home/pi/video-server/video-server-env/bin/python run.py
 
 [Install]
 WantedBy=multi-user.target

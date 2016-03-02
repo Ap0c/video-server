@@ -209,11 +209,3 @@ def add_source():
 
 	else:
 		return 'No such path on the file system.', 400
-
-
-# ----- Main ----- #
-
-if __name__ == '__main__':
-
-	init_db()
-	app.run(debug=True)
