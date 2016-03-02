@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from flask import Flask, g, render_template, request
+from flask import Flask, g, render_template, request, redirect, url_for
 from threading import Thread
 import os.path
 import subprocess
@@ -98,6 +98,53 @@ def episode(episode_id):
 
 	return render_template('episode.html', episode=info, show=show,
 		video_url=video_url)
+
+
+@app.route('/edit_metadata/<media_type>/<media_id>', methods=['GET', 'POST'])
+def edit_metadata(media_type, media_id):
+
+	"""View for editing metadata, and endpoint for posting the edited data."""
+
+	if media_type not in ['movie', 'show', 'episode']:
+		return 'Media type not recognised.', 404
+
+	if request.method == 'GET':
+
+		if media_type == 'movie':
+			query = 'SELECT name, path FROM movies WHERE id=?'
+		elif media_type == 'show':
+			query = 'SELECT name FROM tv_shows WHERE id=?'
+		elif media_type == 'episode':
+			query = 'SELECT name, number, season, path FROM episodes WHERE id=?'
+
+		metadata = dict(db.query(query, (media_id,))[0])
+
+		if not metadata:
+			return 'Media ID not recognised.', 404
+
+		return render_template('edit_metadata.html', metadata=metadata,
+			media_type=media_type)
+
+	else:
+
+		if media_type == 'movie':
+			query = 'UPDATE movies SET name=?, path=? WHERE id=?'
+			args = (request.form['name'], request.form['path'], media_id)
+			route = 'movie'
+		elif media_type == 'show':
+			query = 'UPDATE tv_shows SET name=? WHERE id=?'
+			args = (request.form['name'], media_id)
+			route = 'tv_show'
+		elif media_type == 'episode':
+			query = """UPDATE movies SET name=?, number=?, season=?, path=?
+				WHERE id=?"""
+			args = (request.form['name'], request.form['number'],
+				request.form['season'], request.form['path'], media_id)
+			route = 'episode'
+
+		db.query(query, args)
+
+		return redirect(url_for(route, id=media_id))
 
 
 @app.route('/settings')

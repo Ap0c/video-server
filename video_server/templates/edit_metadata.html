@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Edit Metadata - {{ metadata['name'] }}{% endblock %}
+
+{% block header %}
+	<header><h1>Edit Metadata - {{ metadata['name'] }}</h1></header>
+{% endblock header %}
+
+{% block content %}
+	{% for key, value in metadata.items() if key != 'id' %}
+		<p>{{ key.title() }} - {{ value }}</p>
+	{% endfor %}
+{% endblock content %}
