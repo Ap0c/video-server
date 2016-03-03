@@ -5,5 +5,5 @@
 {% endblock header %}
 {% block content %}
 	<video src="{{ video_url }}" controls></video>
-	<p><a href="{{ url_for('.edit_metadata', media_type='movie', media_id=movie['id']) }}">Edit Metadata</a></p>
+	<p class="edit-metadata"><a href="{{ url_for('.edit_metadata', media_type='movie', media_id=movie['id']) }}">Edit Metadata</a></p>
 {% endblock content %}

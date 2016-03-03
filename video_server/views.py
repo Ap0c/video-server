@@ -82,8 +82,10 @@ def tv_show(show_id):
 
 	info = db.query('SELECT * FROM tv_shows WHERE id = ?', (show_id,))[0]
 	episodes = db.query('SELECT * FROM episodes WHERE show = ?', (show_id,))
+	unknown_season = None in (episode['season'] for episode in episodes)
 
-	return render_template('show.html', show=info, episodes=episodes)
+	return render_template('show.html', show=info, episodes=episodes,
+		unknown_season=unknown_season)
 
 
 @app.route('/tv_shows/episode/<episode_id>')
@@ -123,7 +125,6 @@ def edit_metadata(media_type, media_id):
 			return 'Media ID not recognised.', 404
 
 		metadata = []
-		print(result[0])
 		for key, value in dict(result[0]).items():
 			if key == 'name':
 				datum = {

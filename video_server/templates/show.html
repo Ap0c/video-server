@@ -18,6 +18,8 @@
 		{% endfor %}
 	</section>
 
+	{% if unknown_season %}
+		
 	<section>
 		<h3 class="season">Unknown Season</h3>
 		<ul>
@@ -26,9 +28,10 @@
 			{% endfor %}
 		</ul>
 	</section>
+	{% endif %}
 
 	<section>
-		<p><a href="{{ url_for('.edit_metadata', media_type='show', media_id=show['id']) }}">Edit Metadata</a></p>
+		<p class="edit-metadata"><a href="{{ url_for('.edit_metadata', media_type='show', media_id=show['id']) }}">Edit Metadata</a></p>
 	</section>
 
 {% endblock content %}

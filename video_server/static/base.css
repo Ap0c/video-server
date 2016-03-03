@@ -45,7 +45,7 @@ h1, h2, h3 {
 }
 
 .season {
-	background-color: #ECD9BD;
+	background-color: #ecd9bd;
 }
 
 
@@ -82,11 +82,58 @@ li:hover {
 }
 
 
-/* ----- Videos ----- */
+/* ----- Item Pages ----- */
 
 video {
 	width: 80vw;
-	margin: 0 10vw;
+	margin: 2vh 10vw;
+	background-color: #ecd9bd;
+}
+
+.edit-metadata {
+	text-align: center;
+	padding-top: 2vh;
+	margin: 2vh 5vw;
+	color: #935347;
+}
+
+.edit-metadata a {
+	background-color: #ecd9bd;
+	padding: .5em;
+}
+
+.edit-metadata a:hover {
+	background-color: #935347;
+	color: #ecd9bd;
+}
+
+
+/* ----- Edit Metadata ----- */
+
+.metadata-form {
+	margin: 5vh 5vw;
+}
+
+.metadata-form label, .uneditable-label {
+	color: #935347;
+	background-color: #ecd9bd;
+	padding: .2em .5em;
+	font-size: large;
+}
+
+.metadata-form input[type="text"], input[type="number"], .uneditable-content {
+	width: 100%;
+	font-size: medium;
+	color: inherit;
+	margin: 2vh 1vw 4vh;
+	box-sizing: border-box;
+}
+
+.metadata-form input[type="submit"] {
+	border: none;
+	background-color: #935347;
+	color: #ecd9bd;
+	font-size: medium;
 }
 
 
@@ -135,7 +182,7 @@ video {
 }
 
 .form-fields label {
-	background-color: #ECD9BD;
+	background-color: #ecd9bd;
 	margin: 1.5em 0 .5em;
 	padding: .5em 0;
 	text-align: center;
