@@ -135,27 +135,30 @@ def edit_metadata(media_type, media_id):
 
 	"""View for editing metadata, and endpoint for posting the edited data."""
 
+	error = None
+
 	if media_type not in MEDIA_TYPES:
 		return 'Media type not recognised.', 404
 
-	if request.method == 'GET':
-
-		metadata = mdata.get_metadata(db, media_id, media_type)
-
-		if not metadata:
-			return 'Media ID not recognised.', 404
-
-		return render_template('edit_metadata.html', metadata=metadata,
-			media_type=media_type)
-
-	else:
+	# POST requests.
+	if request.method == 'POST':
 
 		form = request.form
-		mdata.update_metadata(db, media_id, media_type, form)
+		valid, error = mdata.update_metadata(db, media_id, media_type, form)
 
-		route, route_args = _metadata_redirect(media_id, media_type)
+		if valid:
 
-		return redirect(url_for(route, **route_args))
+			route, route_args = _metadata_redirect(media_id, media_type)
+			return redirect(url_for(route, **route_args))
+
+	# GET requests and failed POST requests.
+	metadata = mdata.get_metadata(db, media_id, media_type)
+
+	if not metadata:
+		return 'Media ID not recognised.', 404
+
+	return render_template('edit_metadata.html', metadata=metadata,
+		media_type=media_type, error=error)
 
 
 @app.route('/settings')

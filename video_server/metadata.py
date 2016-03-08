@@ -40,6 +40,22 @@ def _metadata_fields(field_name, value):
 	return formatted
 
 
+def _validate_fields(new_data):
+
+	"""Checks that new data is of the correct format."""
+
+	for field, field_type in _FIELD_TYPES.items():
+
+		if field in new_data and field_type == 'number':
+
+			try:
+				int(new_data[field])
+			except ValueError:
+				return False, "The field '{}' must be an integer.".format(field)
+
+	return True, None
+
+
 def get_metadata(db, media_id, media_type):
 
 	"""Retrieves metadata from the database and formats it."""
@@ -61,6 +77,11 @@ def update_metadata(db, media_id, media_type, new_data):
 
 	"""Updates the metadata in the database."""
 
+	valid, err = _validate_fields(new_data)
+
+	if not valid:
+		return False, err
+
 	if media_type == 'movie':
 
 		query = 'UPDATE movies SET name=? WHERE id=?'
@@ -77,3 +98,4 @@ def update_metadata(db, media_id, media_type, new_data):
 		args = (new_data['name'], new_data['number'], new_data['season'], media_id)
 
 	db.query(query, args)
+	return True, None
