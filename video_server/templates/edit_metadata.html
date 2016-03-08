@@ -18,5 +18,7 @@
 		{% endfor %}
 		<input type="submit" value="Save">
 	</form>
-	{{ error or '' }}
+	{% if error %}
+		<p class="metadata-error">{{ error }}</p>
+	{% endif %}
 {% endblock content %}

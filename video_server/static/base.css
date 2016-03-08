@@ -136,6 +136,10 @@ video {
 	font-size: medium;
 }
 
+.metadata-error {
+	margin: 0 5%;
+}
+
 
 /* ----- Settings ----- */
 
