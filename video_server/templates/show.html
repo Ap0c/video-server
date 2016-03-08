@@ -24,7 +24,7 @@
 		<h3 class="season">Unknown Season</h3>
 		<ul>
 			{% for episode in episodes | selectattr('season', 'none') %}
-				<li>{{ episode['path'].split('/')[-1].split('.')[0] }}</li>
+				<a href="{{ url_for('.episode', episode_id=episode['id']) }}"><li>{{ episode['path'].split('/')[-1].split('.')[0] }}</li></a>
 			{% endfor %}
 		</ul>
 	</section>
