@@ -1,10 +1,10 @@
 # Video Server
 
-Flask application to serve video files on a local network.
+Flask application to serve video files on a local network, targeting the Raspberry Pi specifically.
 
 # Install
 
-First make sure you have Python 3 and a corresponding version of pip. Then grab a copy of the repository and do:
+First make sure you have Python 3 and a corresponding version of pip. Then grab a copy of the repository and set up a virtual environment called `video-server-env`, and run:
 
 ```
 pip install -r requirements.txt
@@ -72,3 +72,24 @@ sudo nginx -s reload
 ```
 
 Nginx should now be up and running, and serving the contents of the `media` directory.
+
+## Configure systemd
+
+This distribution also bundles a systemd file that allows the server to launch at boot. Again, by default it's configured to work when the repository is cloned into the home directory, so if this is not the case open up `video-server.service` and change the following lines to point to the correct location:
+
+```
+WorkingDirectory=/home/pi/video-server
+Environment="PATH=/home/pi/video-server/video-server-env/bin"
+ExecStart=/home/pi/video-server/video-server-env/bin/python run.py
+```
+
+Note also that this assumes a virtual environment called `video-server-env`, so if you named yours something different make sure to change this too.
+
+Next copy this file into the `/etc/systemd/system` directory and activate using:
+
+```
+sudo systemctl enable /etc/systemd/system/video-server.service
+sudo systemctl start video-server.service
+```
+
+The service should now start at boot.
