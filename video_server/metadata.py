@@ -1,6 +1,5 @@
 # ----- Setup ----- #
 
-MEDIA_TYPES = ['movie', 'show', 'episode']
 _EDITABLE_FIELDS = ['name', 'number', 'season']
 _FIELD_TYPES = {
 	'name': 'text',
@@ -56,3 +55,25 @@ def get_metadata(db, media_id, media_type):
 		metadata.append(_metadata_fields(key, value))
 
 	return metadata
+
+
+def update_metadata(db, media_id, media_type, new_data):
+
+	"""Updates the metadata in the database."""
+
+	if media_type == 'movie':
+
+		query = 'UPDATE movies SET name=? WHERE id=?'
+		args = (new_data['name'], media_id)
+
+	elif media_type == 'show':
+
+		query = 'UPDATE tv_shows SET name=? WHERE id=?'
+		args = (new_data['name'], media_id)
+
+	elif media_type == 'episode':
+
+		query = 'UPDATE episodes SET name=?, number=?, season=? WHERE id=?'
+		args = (new_data['name'], new_data['number'], new_data['season'], media_id)
+
+	db.query(query, args)

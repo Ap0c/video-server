@@ -25,6 +25,9 @@ MEDIA_DIR = 'media'
 # Media url.
 MEDIA_URL = 'media'
 
+# Possible media types.
+MEDIA_TYPES = ['movie', 'show', 'episode']
+
 
 # ----- Setup ----- #
 
@@ -33,6 +36,30 @@ app = Flask(__name__)
 
 # Handles database connections and queries.
 db = Database(DB_FILE, DB_SCHEMA)
+
+
+# ----- Functions ----- #
+
+def _metadata_redirect(media_id, media_type):
+
+	"""Parameters for redirect after updating metadata."""
+
+	if media_type == 'movie':
+
+		route = 'movie'
+		route_args = {'movie_id': media_id}
+
+	elif media_type == 'show':
+
+		route = 'tv_show'
+		route_args = {'show_id': media_id}
+
+	elif media_type == 'episode':
+
+		route = 'episode'
+		route_args = {'episode_id': media_id}
+
+	return route, route_args
 
 
 # ----- Routes ----- #
@@ -108,7 +135,7 @@ def edit_metadata(media_type, media_id):
 
 	"""View for editing metadata, and endpoint for posting the edited data."""
 
-	if media_type not in mdata.MEDIA_TYPES:
+	if media_type not in MEDIA_TYPES:
 		return 'Media type not recognised.', 404
 
 	if request.method == 'GET':
@@ -124,29 +151,9 @@ def edit_metadata(media_type, media_id):
 	else:
 
 		form = request.form
+		mdata.update_metadata(db, media_id, media_type, form)
 
-		if media_type == 'movie':
-
-			query = 'UPDATE movies SET name=? WHERE id=?'
-			args = (form['name'], media_id)
-			route = 'movie'
-			route_args = {'movie_id': media_id}
-
-		elif media_type == 'show':
-
-			query = 'UPDATE tv_shows SET name=? WHERE id=?'
-			args = (form['name'], media_id)
-			route = 'tv_show'
-			route_args = {'show_id': media_id}
-
-		elif media_type == 'episode':
-
-			query = 'UPDATE episodes SET name=?, number=?, season=? WHERE id=?'
-			args = (form['name'], form['number'], form['season'], media_id)
-			route = 'episode'
-			route_args = {'episode_id': media_id}
-
-		db.query(query, args)
+		route, route_args = _metadata_redirect(media_id, media_type)
 
 		return redirect(url_for(route, **route_args))
 
