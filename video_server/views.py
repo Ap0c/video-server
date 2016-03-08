@@ -7,6 +7,7 @@ import subprocess
 
 from .scan import sync
 from .db import Database
+import video_server.metadata as mdata
 
 
 # ----- Constants ----- #
@@ -107,48 +108,15 @@ def edit_metadata(media_type, media_id):
 
 	"""View for editing metadata, and endpoint for posting the edited data."""
 
-	if media_type not in ['movie', 'show', 'episode']:
+	if media_type not in mdata.MEDIA_TYPES:
 		return 'Media type not recognised.', 404
 
 	if request.method == 'GET':
 
-		if media_type == 'movie':
-			query = 'SELECT name, path FROM movies WHERE id=?'
-		elif media_type == 'show':
-			query = 'SELECT name, dirname FROM tv_shows WHERE id=?'
-		elif media_type == 'episode':
-			query = 'SELECT name, number, season, path FROM episodes WHERE id=?'
+		metadata = mdata.get_metadata(db, media_id, media_type)
 
-		result = db.query(query, (media_id,))
-
-		if not result:
+		if not metadata:
 			return 'Media ID not recognised.', 404
-
-		metadata = []
-		for key, value in dict(result[0]).items():
-			if key == 'name':
-				datum = {
-					'field': key,
-					'value': value,
-					'editable': True,
-					'type': 'text'
-				}
-			elif key in ['number', 'season']:
-				datum = {
-					'field': key,
-					'value': value,
-					'editable': True,
-					'type': 'number'
-				}
-			elif key == 'path':
-				datum = {
-					'field': key,
-					'value': value.split('/', 1)[1],
-					'editable': False
-				}
-			elif key == 'dirname':
-				datum = {'field': key, 'value': value, 'editable': False}
-			metadata.append(datum)
 
 		return render_template('edit_metadata.html', metadata=metadata,
 			media_type=media_type)
