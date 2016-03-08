@@ -1,6 +1,8 @@
 # Video Server
 
-Flask application to serve video files on a local network, targeting the Raspberry Pi specifically.
+Flask application to serve video files on a local network, targeting the Raspberry Pi specifically. It provides a web interface for navigating content and uses Nginx to serve static files.
+
+The project is currently in early development, and thus the instructions for deployment (given below) are a little involved. The plan is to simplify this later down the line.
 
 # Install
 
