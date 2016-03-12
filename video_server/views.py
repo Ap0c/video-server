@@ -2,8 +2,7 @@
 
 from flask import Flask, g, render_template, request, redirect, url_for
 from threading import Thread
-import os.path
-import subprocess
+import os
 
 from .scan import sync
 from .db import Database
@@ -200,7 +199,7 @@ def add_source():
 
 		symlink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 			MEDIA_DIR, str(row_id))
-		subprocess.call(['ln', '-s', media_path, symlink_path])
+		os.symlink(media_path, symlink_path)
 
 		return 'Created', 201
 
