@@ -2,4 +2,4 @@ vidserver-env/*
 *.db
 *.pyc
 *.DS_Store
-video_server/media/*
+media/*

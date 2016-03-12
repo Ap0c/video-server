@@ -27,6 +27,9 @@ MEDIA_URL = 'media'
 # Possible media types.
 MEDIA_TYPES = ['movie', 'show', 'episode']
 
+# Current working directory.
+WORKING_DIR = os.getcwd()
+
 
 # ----- Setup ----- #
 
@@ -35,6 +38,10 @@ app = Flask(__name__)
 
 # Handles database connections and queries.
 db = Database(DB_FILE, DB_SCHEMA)
+
+# Creates the media directory.
+if not os.path.exists(MEDIA_DIR):
+	os.mkdir(MEDIA_DIR)
 
 
 # ----- Functions ----- #
@@ -197,8 +204,7 @@ def add_source():
 		row_id = db.query('INSERT INTO media_locations (type, path) VALUES (?, ?)',
 			(media_type, media_path))
 
-		symlink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-			MEDIA_DIR, str(row_id))
+		symlink_path = os.path.join(WORKING_DIR, MEDIA_DIR, str(row_id))
 		os.symlink(media_path, symlink_path)
 
 		return 'Created', 201
