@@ -2,11 +2,16 @@
 
 # ----- Aptitude Installs ----- #
 
-# Install python if not present.
+# Update package list.
+echo '\n-----> Updating package list...\n'
 sudo apt-get update
+
+# Install Python 3.
+echo '\n-----> Installing Python 3...\n'
 sudo apt-get install -y python3 python3-pip python3-venv
 
 # Install Nginx.
+echo '\n-----> Installing Nginx...\n'
 sudo apt-get install -y nginx
 
 
@@ -16,6 +21,8 @@ WORKING_DIR=$(pwd)
 
 
 # ----- Configure Nginx ----- #
+
+echo '\n-----> Configuring Nginx...\n'
 
 # Backup config file and then insert symlinks setting.
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx-backup.conf
@@ -33,14 +40,20 @@ sudo nginx -s reload
 
 # ----- Configure Virtual Environment ----- #
 
+echo '\n-----> Creating Python virtual environment...\n'
+
 # Create virtual environment.
 pyvenv video-server-env
+
+echo '\n-----> Installing Python dependencies...\n'
 
 # Install dependencies.
 $WORKING_DIR/video-server-env/bin/pip install -r requirements.txt
 
 
 # ---- Configure Systemd ----- #
+
+echo '\n-----> Configuring Systemd...\n'
 
 # Replace paths to working directory.
 WORKING_DIR_ESC="${WORKING_DIR//\//\\/}"
