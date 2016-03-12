@@ -4,7 +4,7 @@
 
 # Install python if not present.
 sudo apt-get update
-sudo apt-get install -y python3, python3-pip
+sudo apt-get install -y python3 python3-pip python3-venv
 
 # Install Nginx.
 sudo apt-get install -y nginx
@@ -19,7 +19,7 @@ WORKING_DIR=$(pwd)
 
 # Backup config file and then insert symlinks setting.
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx-backup.conf
-sudo sed -i '' '/http {/a\'$'\n''\ \ \ \ disable_symlinks off;'$'\n' /etc/nginx/nginx.conf
+sudo sed -i '/http {/a \ \ \ \ disable_symlinks off;' /etc/nginx/nginx.conf
 
 # Create site file and copy to nginx directory.
 MEDIA_DIR=$WORKING_DIR/media/
