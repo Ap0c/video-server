@@ -2,9 +2,23 @@
 
 Flask application to serve video files on a local network, targeting the Raspberry Pi specifically. It provides a web interface for navigating content and uses Nginx to serve static files.
 
-The project is currently in early development, and thus the instructions for deployment (given below) are a little involved. The plan is to simplify this later down the line.
+# Simple Install
 
-# Install
+The project comes bundled with an installation script for the Raspberry Pi. Simply download the repository, navigate to the directory, and run:
+
+```
+sudo ./setup.sh
+```
+
+Then navigate to `localhost:8080` in your browser if you are on the Pi, or `<raspberry_pi_ip_address>:8080` in your browser if you are on another computer on the network. To get the Pi's IP address, use the command:
+
+```
+hostname -I
+```
+
+# Manual Install
+
+If, for whatever reason, the setup script does not work, or you simply want to install the project manually, the procedure is as follows.
 
 First make sure you have Python 3 and a corresponding version of pip. Then grab a copy of the repository and set up a virtual environment called `video-server-env`, and run:
 
@@ -20,11 +34,9 @@ python main.py
 
 to launch the app.
 
-# Media
+## Install Nginx
 
 The app itself is not set up to serve the media content, as this is an inefficient thing to do from Python. Instead, it is designed to run behind Nginx, which handles all requests for media, and passes requests for anything else on to the app. The following instructions for getting Nginx up and running are tailored to the Raspberry Pi (running Raspbian, a derivative of Debian), but should be easy to tweak for other systems.
-
-## Install Nginx
 
 First, to install Nginx:
 
