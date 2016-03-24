@@ -166,7 +166,7 @@ def _diff_shows(db, tv_dir, current_episodes):
 
 def _sync_movies(db, movie_dir):
 
-	"""Dummy function for synchronising movies."""
+	"""Synchronises the movies on disk with the database."""
 
 	db_movies = db.query('SELECT path, id FROM movies')
 	stored_movies = {movie['path']: movie['id'] for movie in db_movies}
@@ -179,7 +179,7 @@ def _sync_movies(db, movie_dir):
 
 def _sync_shows(db, tv_dir):
 
-	"""Dummy function for synchronising TV shows."""
+	"""Synchronises the TV shows on disk with the database."""
 
 	db_episodes = db.query('SELECT path, id FROM episodes')
 	stored_episodes = {ep['path']: ep['id'] for ep in db_episodes}
