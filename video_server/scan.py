@@ -56,6 +56,16 @@ def _get_seasons(tv_dir, show):
 	return seasons
 
 
+def _show_list(tv_path):
+
+	"""Generator providing a list of valid tv shows."""
+
+	for show in os.listdir(tv_path):
+
+		if _is_dir(tv_path, show) and not show.startswith('.'):
+			yield show
+
+
 def _read_shows(tv_dir):
 
 	"""Builds a list of TV shows."""
@@ -63,7 +73,7 @@ def _read_shows(tv_dir):
 	tv_shows = []
 	tv_path = tv_dir['path']
 
-	for name in (show for show in os.listdir(tv_path) if _is_dir(tv_path, show)):
+	for name in _show_list(tv_path):
 
 		show_name = name.replace('_', ' ').title()
 
