@@ -16,6 +16,14 @@ Then navigate to `localhost:8080` in your browser if you are on the Pi, or `<ras
 hostname -I
 ```
 
+# Test
+
+To run the tests:
+
+```
+python3 -m unittest -v
+```
+
 # Manual Install
 
 If, for whatever reason, the setup script does not work, or you simply want to install the project manually, the procedure is as follows.
