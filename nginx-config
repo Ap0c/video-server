@@ -9,7 +9,7 @@ server {
         location /media/ {
                 alias /home/pi/video-server/media/;
                 limit_rate_after 10m;
-                limit_rate 150k;
+                limit_rate 800k;
         }
 
         location / {

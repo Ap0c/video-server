@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from flask import Flask, g, render_template, request, redirect, url_for
+from flask import Flask, g, render_template, request, redirect, url_for, jsonify
 from threading import Thread
 import os
 
@@ -211,3 +211,22 @@ def add_source():
 
 	else:
 		return 'No such path on the file system.', 400
+
+
+@app.route('/media_info')
+def media_info():
+
+	"""Returns a json copy of all media in the database."""
+
+	movie_list = db.query('SELECT * FROM movies')
+	print(movie_list)
+	movie_data = []
+
+	for movie_info in movie_list:
+
+		movie_data.append({
+			'name': movie_info['name'],
+			'url': '/{}/{}'.format(MEDIA_URL, movie_info['path'])
+		})
+
+	return jsonify({'movies': movie_data})
