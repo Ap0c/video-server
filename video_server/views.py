@@ -1,6 +1,7 @@
 # ----- Imports ----- #
 
-from flask import Flask, g, render_template, request, redirect, url_for, jsonify
+from flask import (Flask, g, render_template, request, redirect, url_for,
+	jsonify)
 from threading import Thread
 import os
 
@@ -218,15 +219,32 @@ def media_info():
 
 	"""Returns a json copy of all media in the database."""
 
-	movie_list = db.query('SELECT * FROM movies')
-	print(movie_list)
-	movie_data = []
+	movie_data = db.query('SELECT name, path FROM movies')
+	movie_list = []
 
-	for movie_info in movie_list:
+	for movie_info in movie_data:
 
-		movie_data.append({
+		movie_list.append({
 			'name': movie_info['name'],
 			'url': '/{}/{}'.format(MEDIA_URL, movie_info['path'])
 		})
 
-	return jsonify({'movies': movie_data})
+	show_list = db.query('SELECT id, name FROM tv_shows')
+	episode_data = db.query('SELECT * FROM episodes')
+	episode_list = []
+
+	for ep_info in episode_data:
+
+		episode_list.append({
+			'name': ep_info['name'],
+			'number': ep_info['number'],
+			'season': ep_info['season'],
+			'url': '/{}/{}'.format(MEDIA_URL, ep_info['path']),
+			'show': ep_info['show']
+		})
+
+	return jsonify({
+		'movies': movie_list,
+		'shows': [dict(show) for show in show_list],
+		'episodes': episode_list
+	})
