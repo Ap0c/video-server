@@ -219,12 +219,13 @@ def media_info():
 
 	"""Returns a json copy of all media in the database."""
 
-	movie_data = db.query('SELECT name, path FROM movies')
+	movie_data = db.query('SELECT * FROM movies')
 	movie_list = []
 
 	for movie_info in movie_data:
 
 		movie_list.append({
+			'id': movie_info['id'],
 			'name': movie_info['name'],
 			'url': '/{}/{}'.format(MEDIA_URL, movie_info['path'])
 		})
@@ -236,6 +237,7 @@ def media_info():
 	for ep_info in episode_data:
 
 		episode_list.append({
+			'id': ep_info['id'],
 			'name': ep_info['name'],
 			'number': ep_info['number'],
 			'season': ep_info['season'],
