@@ -92,7 +92,11 @@ def _scrape_movies(db):
 	"""Retrieves movies, looks up metadata, and stores it in the db."""
 
 	movies = db.query('SELECT id, name FROM movies')
-	db.many('INSERT INTO movie_metadata', movies)
+	query = 'INSERT INTO movie_metadata VALUES ({})'.format(
+		','.join(['?']*len(movies))
+	)
+
+	db.many(query, movies)
 
 
 def _scrape_shows(db):
@@ -100,7 +104,11 @@ def _scrape_shows(db):
 	"""Retrieves shows, looks up metadata, and stores it in the db."""
 
 	shows = db.query('SELECT id, name FROM tv_shows')
-	db.many('INSERT INTO show_metadata', shows)
+	query = 'INSERT INTO show_metadata VALUES ({})'.format(
+		','.join(['?']*len(shows))
+	)
+
+	db.many(query, shows)
 
 
 def _scrape_eps(db):
@@ -111,7 +119,12 @@ def _scrape_eps(db):
 		episodes.season AS season, tv_shows.name AS show
 			FROM episodes, tv_shows
 			WHERE tv_shows.id = episodes.show""")
-	db.many('INSERT INTO episode_metadata', episodes)
+
+	query = 'INSERT INTO episode_metadata VALUES ({})'.format(
+		','.join(['?']*len(episodes))
+	)
+
+	db.many(query, episodes)
 
 
 def lookup_media(db_file):

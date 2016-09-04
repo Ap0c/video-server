@@ -1,7 +1,15 @@
 # ----- Imports ----- #
 
+import os
 import unittest
 import video_server.omdb as omdb
+from video_server.db import Database
+
+
+# ----- Setup ----- #
+
+SCHEMA_FILE = 'video_server/schema.sql'
+TEST_DB = 'test.db'
 
 
 # ----- Tests ----- #
@@ -61,8 +69,35 @@ class TestOmdb(unittest.TestCase):
 
 		"""Makes sure list of shows is retrieved correctly."""
 
-		episodes = [{'id': 3, 'show': 'Silicon Valley', 'season': 1, 'number': 1}]
+		episodes = [{'id': 3, 'show': 'Silicon Valley', 'season': 1,
+			'number': 1}]
 		metadata = omdb._lookup_eps(episodes)
 
 		self.assertIn('title', metadata[0])
 		self.assertEqual(metadata[0]['id'], 3)
+
+
+class TestOmdbDB(unittest.TestCase):
+
+	"""Tests the parts of the omdb.py module that hit the database."""
+
+	def tearDown(self):
+
+		"""Removes any instance of the test database."""
+
+		os.remove(TEST_DB)
+
+	def test_scrape_movies(self):
+
+		"""Makes sure movies are scraped and stored properly."""
+
+		db = Database(TEST_DB, SCHEMA_FILE)
+
+		movie = (1, 'Big Buck Bunny', 'dummy_path')
+		db.query('INSERT INTO movies VALUES (?, ?, ?)', movie)
+
+		omdb._scrap_movies(db)
+		metadata = db.query('SELECT * FROM movie_metadata WHERE id = 1')
+
+		self.assertEqual(metadata['year'], '2008')
+		self.assertEqual(metadata['id'], 1)
