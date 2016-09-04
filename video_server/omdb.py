@@ -35,3 +35,29 @@ def _ep_data(show=None, season=None, episode=None):
 
 	metadata = omdb.get(title=show, season=season, episode=episode)
 	return {f: metadata[f] for f in _EP_FIELDS if f in metadata}
+
+
+def _lookup_movies(movies):
+
+	"""Looks up movie metadata."""
+
+	result = []
+
+	for movie in movies:
+
+		metadata = _movie_data(movie['name'])
+		metadata['id'] = movie['id']
+
+		result.append(metadata)
+
+	return result
+
+
+def _lookup_shows(db):
+
+	"""Looks up show metadata."""
+
+
+def _lookup_eps(db):
+
+	"""Looks up episode metadata."""
