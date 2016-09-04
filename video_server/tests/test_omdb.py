@@ -22,6 +22,14 @@ class TestOmdb(unittest.TestCase):
 
 		"""Makes sure show data is retrieved correctly."""
 
+		data = omdb._show_data('Silicon Valley')
+		self.assertTrue(all(field in data for field in omdb._SHOW_FIELDS))
+		self.assertEqual(data.imdb_id, 'tt2575988')
+
 	def test_ep_data(self):
 
 		"""Makes sure episode data is retrieved correctly."""
+
+		data = omdb._show_data(show='Silicon Valley', season=1, episode=1)
+		self.assertTrue(all(field in data for field in omdb._EP_FIELDS))
+		self.assertEqual(data.imdb_id, 'tt3222784')
