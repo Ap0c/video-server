@@ -18,11 +18,13 @@ hostname -I
 
 # Test
 
-To run the tests:
+Testing is handled by the Nose test framework. To run the tests:
 
 ```
-python3 -m unittest -v
+nosetests
 ```
+
+This will provide a printout in the shell and also produce a coverage report, accessible at `cover/index.html`.
 
 # Manual Install
 
