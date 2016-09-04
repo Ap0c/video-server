@@ -3,6 +3,13 @@
 import omdb
 
 
+# ----- Setup ----- #
+
+_MOVIE_FIELDS = ()
+_SHOW_FIELDS = ()
+_EP_FIELDS = ()
+
+
 # ----- Functions ----- #
 
 def _movie_data(name):
