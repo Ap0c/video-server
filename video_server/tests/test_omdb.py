@@ -103,3 +103,34 @@ class TestOmdbDB(unittest.TestCase):
 
 		self.assertEqual(metadata[0]['year'], '2008')
 		self.assertEqual(metadata[0]['id'], 1)
+
+	def test_scrape_shows(self):
+
+		"""Makes sure shows are scraped and stored properly."""
+
+		db = Database(TEST_DB, SCHEMA_FILE)
+
+		show = (2, 'Silicon Valley', 'dummy_path')
+		db.query('INSERT INTO tv_shows VALUES (?, ?, ?)', show)
+
+		omdb._scrape_shows(db)
+		metadata = db.query('SELECT * FROM show_metadata WHERE id = 2')
+
+		self.assertEqual(metadata[0]['id'], 2)
+
+	def test_scrape_eps(self):
+
+		"""Makes sure episodes are scraped and stored properly."""
+
+		db = Database(TEST_DB, SCHEMA_FILE)
+
+		show = (2, 'Silicon Valley', 'dummy_path')
+		db.query('INSERT INTO tv_shows VALUES (?, ?, ?)', show)
+		episode = (3, None, 1, 1, 'dummy_path', 2)
+		db.query('INSERT INTO episodes VALUES (?, ?, ?, ?, ?, ?)', episode)
+
+		omdb._scrape_eps(db)
+		metadata = db.query('SELECT * FROM episode_metadata WHERE id = 3')
+
+		self.assertEqual(metadata[0]['title'], 'Minimum Viable Product')
+		self.assertEqual(metadata[0]['id'], 3)
