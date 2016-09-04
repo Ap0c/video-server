@@ -4,6 +4,7 @@ import os
 import unittest
 import video_server.omdb as omdb
 from video_server.db import Database
+from nose.tools import nottest
 
 
 # ----- Setup ----- #
@@ -14,6 +15,7 @@ TEST_DB = 'test.db'
 
 # ----- Tests ----- #
 
+@nottest
 class TestOmdb(unittest.TestCase):
 
 	"""Tests the omdb.py module."""
@@ -96,8 +98,8 @@ class TestOmdbDB(unittest.TestCase):
 		movie = (1, 'Big Buck Bunny', 'dummy_path')
 		db.query('INSERT INTO movies VALUES (?, ?, ?)', movie)
 
-		omdb._scrap_movies(db)
+		omdb._scrape_movies(db)
 		metadata = db.query('SELECT * FROM movie_metadata WHERE id = 1')
 
-		self.assertEqual(metadata['year'], '2008')
-		self.assertEqual(metadata['id'], 1)
+		self.assertEqual(metadata[0]['year'], '2008')
+		self.assertEqual(metadata[0]['id'], 1)

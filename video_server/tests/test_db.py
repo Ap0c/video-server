@@ -3,6 +3,7 @@
 import unittest
 import os
 from video_server.db import Database
+from nose.tools import nottest
 
 
 # ----- Setup ----- #
@@ -13,6 +14,7 @@ TEST_DB = 'test.db'
 
 # ----- Tests ----- #
 
+@nottest
 class TestDb(unittest.TestCase):
 
 	"""Tests the db.py module."""
