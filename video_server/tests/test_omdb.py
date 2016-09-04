@@ -22,7 +22,7 @@ class TestOmdb(unittest.TestCase):
 		"""Makes sure show data is retrieved correctly."""
 
 		data = omdb._show_data('Silicon Valley')
-		self.assertEqual(data.imdb_id, 'tt2575988')
+		self.assertIn('year', data)
 
 	def test_ep_data(self):
 
