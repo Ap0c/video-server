@@ -4,3 +4,5 @@
 *.DS_Store
 media/*
 sftp-config.json
+.coverage
+cover/*
