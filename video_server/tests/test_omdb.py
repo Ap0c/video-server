@@ -15,6 +15,8 @@ class TestOmdb(unittest.TestCase):
 		"""Makes sure movie data is retrieved correctly."""
 
 		data = omdb._movie_data('Big Buck Bunny')
+
+		self.assertTrue(all(k in data for k in omdb._MOVIE_FIELDS))
 		self.assertEqual(data['year'], '2008')
 
 	def test_show_data(self):
@@ -22,6 +24,8 @@ class TestOmdb(unittest.TestCase):
 		"""Makes sure show data is retrieved correctly."""
 
 		data = omdb._show_data('Silicon Valley')
+
+		self.assertTrue(all(k in data for k in omdb._SHOW_FIELDS))
 		self.assertIn('year', data)
 
 	def test_ep_data(self):
@@ -29,6 +33,8 @@ class TestOmdb(unittest.TestCase):
 		"""Makes sure episode data is retrieved correctly."""
 
 		data = omdb._ep_data(show='Silicon Valley', season=1, episode=1)
+
+		self.assertTrue(all(k in data for k in omdb._EP_FIELDS))
 		self.assertIn('title', data)
 
 	def test_lookup_movies(self):
