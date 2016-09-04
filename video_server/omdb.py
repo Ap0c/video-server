@@ -6,10 +6,16 @@ from .db import Database
 
 # ----- Setup ----- #
 
+# Database columns for each media type.
 _MOVIE_FIELDS = ('id', 'poster_url', 'plot', 'runtime', 'year', 'imdb_rating',
 	'actors', 'director')
 _SHOW_FIELDS = ('id', 'poster_url', 'year', 'plot')
 _EP_FIELDS = ('id', 'poster_url', 'plot', 'runtime', 'title')
+
+# SQL query parameters '?' for database columns.
+_MOVIE_PARAMS = ','.join(['?']*len(_MOVIE_FIELDS))
+_SHOW_PARAMS = ','.join(['?']*len(_SHOW_FIELDS))
+_EP_PARAMS = ','.join(['?']*len(_EP_FIELDS))
 
 
 # ----- Functions ----- #
@@ -94,10 +100,7 @@ def _scrape_movies(db):
 	movies = db.query('SELECT id, name FROM movies')
 	metadata = _lookup_movies(movies)
 
-	query = 'INSERT INTO movie_metadata VALUES ({})'.format(
-		','.join(['?']*len(_MOVIE_FIELDS))
-	)
-
+	query = 'INSERT INTO movie_metadata VALUES ({})'.format(_MOVIE_PARAMS)
 	db.many(query, metadata)
 
 
@@ -108,10 +111,7 @@ def _scrape_shows(db):
 	shows = db.query('SELECT id, name FROM tv_shows')
 	metadata = _lookup_shows(shows)
 
-	query = 'INSERT INTO show_metadata VALUES ({})'.format(
-		','.join(['?']*len(_SHOW_FIELDS))
-	)
-
+	query = 'INSERT INTO show_metadata VALUES ({})'.format(_SHOW_PARAMS)
 	db.many(query, metadata)
 
 
@@ -123,12 +123,9 @@ def _scrape_eps(db):
 		episodes.season AS season, tv_shows.name AS show
 			FROM episodes, tv_shows
 			WHERE tv_shows.id = episodes.show""")
+
 	metadata = _lookup_eps(episodes)
-
-	query = 'INSERT INTO episode_metadata VALUES ({})'.format(
-		','.join(['?']*len(_EP_FIELDS))
-	)
-
+	query = 'INSERT INTO episode_metadata VALUES ({})'.format(_EP_PARAMS)
 	db.many(query, metadata)
 
 
