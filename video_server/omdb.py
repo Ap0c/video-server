@@ -53,11 +53,34 @@ def _lookup_movies(movies):
 	return result
 
 
-def _lookup_shows(db):
+def _lookup_shows(shows):
 
 	"""Looks up show metadata."""
 
+	result = []
 
-def _lookup_eps(db):
+	for show in shows:
+
+		metadata = _show_data(show['name'])
+		metadata['id'] = show['id']
+
+		result.append(metadata)
+
+	return result
+
+
+def _lookup_eps(episodes):
 
 	"""Looks up episode metadata."""
+
+	result = []
+
+	for episode in episodes:
+
+		metadata = _ep_data(show=episode['show'], season=episode['season'],
+			episode=episode['number'])
+		metadata['id'] = episode['id']
+
+		result.append(metadata)
+
+	return result
