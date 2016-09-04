@@ -40,3 +40,23 @@ class TestOmdb(unittest.TestCase):
 
 		self.assertEqual(metadata[0]['year'], '2008')
 		self.assertEqual(metadata[0]['id'], 1)
+
+	def test_lookup_shows(self):
+
+		"""Makes sure list of shows is retrieved correctly."""
+
+		shows = [{'id': 2, 'name': 'Silicon Valley'}]
+		metadata = omdb._lookup_shows(shows)
+
+		self.assertIn('year', metadata[0])
+		self.assertEqual(metadata[0]['id'], 2)
+
+	def test_lookup_eps(self):
+
+		"""Makes sure list of shows is retrieved correctly."""
+
+		episodes = [{'id': 3, 'show': 'Silicon Valley', 'season': 1, 'number': 1}]
+		metadata = omdb._lookup_eps(episodes)
+
+		self.assertIn('title', metadata[0])
+		self.assertEqual(metadata[0]['id'], 3)
