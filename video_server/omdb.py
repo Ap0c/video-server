@@ -8,7 +8,7 @@ import omdb
 _MOVIE_FIELDS = ('poster_url', 'plot', 'runtime', 'year', 'imdb_rating',
 	'actors', 'director')
 _SHOW_FIELDS = ('poster_url', 'year', 'plot')
-_EP_FIELDS = ()
+_EP_FIELDS = ('poster_url', 'plot', 'runtime', 'title')
 
 
 # ----- Functions ----- #
@@ -32,3 +32,6 @@ def _show_data(name):
 def _ep_data(show=None, season=None, episode=None):
 
 	"""Retrieves the info for an episode."""
+
+	metadata = omdb.get(title=show, season=season, episode=episode)
+	return {f: metadata[f] for f in _EP_FIELDS if f in metadata}

@@ -28,5 +28,5 @@ class TestOmdb(unittest.TestCase):
 
 		"""Makes sure episode data is retrieved correctly."""
 
-		data = omdb._show_data(show='Silicon Valley', season=1, episode=1)
-		self.assertEqual(data.imdb_id, 'tt3222784')
+		data = omdb._ep_data(show='Silicon Valley', season=1, episode=1)
+		self.assertIn('title', data)
